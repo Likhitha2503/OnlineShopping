@@ -2,6 +2,7 @@
 using OnlineShopping.DataStore;
 using OnlineShopping.Models;
 using OnlineShopping.Models.DTO;
+using OnlineShopping_API.DataStore;
 
 namespace OnlineShopping.Controllers
 {
@@ -9,11 +10,17 @@ namespace OnlineShopping.Controllers
     [Route("api/CategoryAPI")]
     public class CategoryAPIController : ControllerBase
     {
+
+        private readonly ApplicationDbContext _db;
+        public CategoryAPIController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<CategoryDto>> GetCategories()
         {
-            return Ok(CategoryStore.CategoryList);
+            return Ok(_db.Categories.ToList());
         }
 
 
@@ -29,7 +36,7 @@ namespace OnlineShopping.Controllers
                 return BadRequest();
             }
 
-            var category = CategoryStore.CategoryList.FirstOrDefault(u => u.Id == id);
+            var category = _db.Categories.FirstOrDefault(u => u.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -44,7 +51,7 @@ namespace OnlineShopping.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<CategoryDto> CreateVilla([FromBody] CategoryDto categoryDto)
         { 
-            if (CategoryStore.CategoryList.FirstOrDefault(u=>u.Name.ToLower()== categoryDto.Name.ToLower()) != null)
+            if (_db.Categories.FirstOrDefault(u=>u.Name.ToLower()== categoryDto.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomeError", "Category already Exist");
                 return BadRequest(ModelState);
@@ -58,8 +65,15 @@ namespace OnlineShopping.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-            categoryDto.Id = CategoryStore.CategoryList.OrderByDescending(u => u.Id).FirstOrDefault().Id+1;
-            CategoryStore.CategoryList.Add(categoryDto);
+            Category model = new()
+            {
+                Id = categoryDto.Id,
+                ImageUrl = categoryDto.ImageUrl,
+                Name = categoryDto.Name
+
+            };
+            _db.Categories.Add(model);
+            _db.SaveChanges();
 
             return CreatedAtRoute("GetCategory",new { id = categoryDto.Id },categoryDto);
         }
@@ -75,12 +89,13 @@ namespace OnlineShopping.Controllers
             {
                 return BadRequest();
             }
-            var category = CategoryStore.CategoryList.FirstOrDefault(u => u.Id == id);
+            var category = _db.Categories.FirstOrDefault(u => u.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
-            CategoryStore.CategoryList.Remove(category);
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
             return NoContent();
 
         }
@@ -93,9 +108,15 @@ namespace OnlineShopping.Controllers
             {
                 return BadRequest();
             }
-            var category = CategoryStore.CategoryList.FirstOrDefault(u => u.Id == id);
-            category.Name = categoryDto.Name;
-            
+            Category model = new()
+            {
+                Id = categoryDto.Id,
+                ImageUrl = categoryDto.ImageUrl,
+                Name = categoryDto.Name
+
+            };
+            _db.Categories.Update(model);
+            _db.SaveChanges();
 
             return NoContent();
 
