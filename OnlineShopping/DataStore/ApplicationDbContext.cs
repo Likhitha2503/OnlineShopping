@@ -21,7 +21,7 @@ namespace OnlineShopping_API.DataStore
                 {
                     Id = 1,
                     Name = "Clothing",
-                    ImageUrl = ""
+                    
                     
        
                 },
@@ -29,28 +29,28 @@ namespace OnlineShopping_API.DataStore
               {
                   Id = 2,
                   Name = "Mobiles",
-                  ImageUrl = ""
+                 
                  
               },
               new Category
               {
                   Id = 3,
                   Name = "Groceries",
-                  ImageUrl = ""
+                  
                  
               },
               new Category
               {
                   Id = 4,
                   Name = "Electronics",
-                  ImageUrl = ""
+                  
                   
               },
               new Category
               {
                   Id = 5,
                   Name = "Stationery",
-                  ImageUrl = "",
+                
                   
               });
         }
