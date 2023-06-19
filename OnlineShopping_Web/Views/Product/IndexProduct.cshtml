@@ -3,7 +3,7 @@
 <div class="container p-4 border">
 	<div class="row pb-2">
 		<div class="col">
-			<h1 class="text-primary">Product List</h1>
+			<h4 class="text-primary">Product List</h4>
 		</div>
 		<div class="col text-end pt-1">
 			<a asp-controller="Product" asp-action="CreateProduct" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i> Create New Product</a>
@@ -17,9 +17,6 @@
 					Product Name
 				</th>
 				<th>
-					 Description  
-				</th>
-				<th>
 					 Price
 				</th>
 				<th>
@@ -29,7 +26,10 @@
 				     AvailableQuantity
 
 				</th>
-				
+				@*<th>
+					Description
+				</th>
+				*@
 				<th></th>
 			</tr>
 		</thead>
@@ -38,10 +38,11 @@
 			{
 				<tr>
 					<td>@item.Name</td>
-					<td>@item.Description</td>
 					<td>@item.Price</td>
 					<td>@item.Category.Name</td>
 					<td>@item.AvailableQuantity</td>
+					@*<td>@item.Description</td>*@
+
 					<td>
 						<a asp-controller="Category" asp-action="Updateproduct" asp-route-villaNo="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
 						<a asp-controller="Category" asp-action="DeleteProduct" asp-route-villaNo="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
