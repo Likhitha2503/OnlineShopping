@@ -6,13 +6,14 @@ using System.Linq.Expressions;
 
 namespace OnlineShopping_API.Repository
 {
-    public class Repository<T>  : IRepository<T> where T : class
+	public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
         internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
+            //_db.Products.Include(u => u.Category).ToList();
             this.dbSet = _db.Set<T>();
         }
 
@@ -20,10 +21,12 @@ namespace OnlineShopping_API.Repository
         {
             await dbSet.AddAsync(entity);
             await SaveAsync();
-        }
+		}
+        
 
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true)
+
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string ? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (!tracked)
@@ -34,12 +37,19 @@ namespace OnlineShopping_API.Repository
             {
                 query = query.Where(filter);
             }
-            return await query.FirstOrDefaultAsync();
+			if (includeProperties != null)
+			{
+				foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					query = query.Include(includeProp);
+				}
+			}
+			return await query.FirstOrDefaultAsync();
         }
 
 
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
 
@@ -47,7 +57,14 @@ namespace OnlineShopping_API.Repository
             {
                 query = query.Where(filter);
             }
-            return await query.ToListAsync();
+			if (includeProperties != null)
+			{
+				foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					query = query.Include(includeProp);
+				}
+			}
+			return await query.ToListAsync();
         }
 
 
@@ -65,6 +82,6 @@ namespace OnlineShopping_API.Repository
             await _db.SaveChangesAsync();
         }
 
-
-    }
+		
+	}
 }

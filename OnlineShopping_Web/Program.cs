@@ -10,6 +10,8 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddHttpClient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 

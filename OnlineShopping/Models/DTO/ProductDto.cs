@@ -20,5 +20,7 @@ namespace OnlineShopping.Models.DTO
         public int AvailableQuantity { get; set; }
 
         public string ImageUrl { get; set; }
+
+        public CategoryDto Category { get; set; }   
     }
 }
