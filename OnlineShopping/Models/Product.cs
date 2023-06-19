@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShopping.Models
 {
@@ -13,8 +14,10 @@ namespace OnlineShopping.Models
 
         public  string Description { get; set; }
 
-        //public Category Category { get; set; }
-        //public  int CategoryId { get; set; }
+        public Category Category { get; set; }
+       
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
         [Required]
         public  float Price { get; set; }
         [Required]

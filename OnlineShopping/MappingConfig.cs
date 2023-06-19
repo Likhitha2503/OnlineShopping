@@ -11,6 +11,10 @@ namespace OnlineShopping_API
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
 
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductDto, Product>();
+
+
 
         }
     }

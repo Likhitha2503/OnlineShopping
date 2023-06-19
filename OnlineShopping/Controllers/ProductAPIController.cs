@@ -12,30 +12,30 @@ using System.Net;
 namespace OnlineShopping.Controllers
 {
     [ApiController]
-    [Route("api/CategoryAPI")]
-    public class CategoryAPIController : ControllerBase
+    [Route("api/ProductAPI")]
+    public class ProductAPIController : ControllerBase
     {
         protected APIResponse _response;
 
-        private readonly ICategoryRepository _dbCategory;
+        private readonly IProductRepository _dbProduct;
         private readonly IMapper _mapper;
 
-        public CategoryAPIController(ICategoryRepository dbCategory, IMapper mapper)
+        public ProductAPIController(IProductRepository dbProduct, IMapper mapper)
         {
-            _dbCategory = dbCategory;
+            _dbProduct = dbProduct;
             _mapper = mapper;
             this._response = new();
 
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public  async Task<ActionResult<APIResponse>> GetCategories()
+        public  async Task<ActionResult<APIResponse>> GetProducts()
         {
             try
             {
 
-                IEnumerable<Category> categoryList = await _dbCategory.GetAllAsync();
-                _response.Result = _mapper.Map<List<CategoryDto>>(categoryList);
+                IEnumerable<Product> productList = await _dbProduct.GetAllAsync();
+                _response.Result = _mapper.Map<List<ProductDto>>(productList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
 
@@ -50,12 +50,12 @@ namespace OnlineShopping.Controllers
         }
 
 
-        [HttpGet("{id:int}",Name = "GetCategory")]
+        [HttpGet("{id:int}",Name = "GetProduct")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<APIResponse>> GetCategories(int id)
+        public async Task<ActionResult<APIResponse>> GetProducts(int id)
         {
             try
             {
@@ -64,13 +64,13 @@ namespace OnlineShopping.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var category = await _dbCategory.GetAsync(u => u.Id == id);
-                if (category == null)
+                var product = await _dbProduct.GetAsync(u => u.Id == id);
+                if (product == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                _response.Result = _mapper.Map<ProductDto>(product);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -87,7 +87,7 @@ namespace OnlineShopping.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateCategory([FromBody] CategoryDto createDto)
+        public async Task<ActionResult<APIResponse>> CreateProduct([FromBody] ProductDto createDto)
         {
             try
             {
@@ -95,9 +95,9 @@ namespace OnlineShopping.Controllers
                 //{
                 //    return BadRequest(ModelState);
                 //}
-                if (await _dbCategory.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
+                if (await _dbProduct.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Category already Exists!");
+                    ModelState.AddModelError("CustomError", "Product already Exists!");
                     return BadRequest(ModelState);
                 }
 
@@ -109,7 +109,7 @@ namespace OnlineShopping.Controllers
                 //{
                 //    return StatusCode(StatusCodes.Status500InternalServerError);
                 //}
-                Category category = _mapper.Map<Category>(createDto);
+                Product product = _mapper.Map<Product>(createDto);
 
                 //Villa model = new()
                 //{
@@ -121,10 +121,10 @@ namespace OnlineShopping.Controllers
                 //    Rate = createDTO.Rate,
                 //    Sqft = createDTO.Sqft
                 //};
-                await _dbCategory.CreateAsync(category);
-                _response.Result = _mapper.Map<CategoryDto>(category);
+                await _dbProduct.CreateAsync(product);
+                _response.Result = _mapper.Map<ProductDto>(product);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetCategory", new { id = category.Id }, _response);
+                return CreatedAtRoute("GetProduct", new { id = product.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -139,8 +139,8 @@ namespace OnlineShopping.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpDelete("{id:int}", Name = "DeleteCategory")]
-        public async Task<ActionResult<APIResponse>> DeleteCategory(int id)
+        [HttpDelete("{id:int}", Name = "DeleteProduct")]
+        public async Task<ActionResult<APIResponse>> DeleteProduct(int id)
         {
             try
             {
@@ -148,12 +148,12 @@ namespace OnlineShopping.Controllers
                 {
                     return BadRequest();
                 }
-                var category = await _dbCategory.GetAsync(u => u.Id == id);
-                if (category == null)
+                var product = await _dbProduct.GetAsync(u => u.Id == id);
+                if (product == null)
                 {
                     return NotFound();
                 }
-                await _dbCategory.RemoveAsync(category);
+                await _dbProduct.RemoveAsync(product);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -167,10 +167,10 @@ namespace OnlineShopping.Controllers
             return _response;
 
         }
-        [HttpPut("{id:int}", Name = "UpdateCategory")]
+        [HttpPut("{id:int}", Name = "UpdateProduct")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateCategory(int id, [FromBody]CategoryDto updateDto)
+        public async Task<ActionResult<APIResponse>> UpdateProduct(int id, [FromBody] ProductDto updateDto)
         {
             try
             {
@@ -179,9 +179,9 @@ namespace OnlineShopping.Controllers
                     return BadRequest();
                 }
 
-                Category model = _mapper.Map<Category>(updateDto);
+                Product model = _mapper.Map<Product>(updateDto);
 
-                await _dbCategory.UpdateAsync(model);
+                await _dbProduct.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
