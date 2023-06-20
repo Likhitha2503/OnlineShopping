@@ -97,9 +97,15 @@ namespace OnlineShopping.Controllers
                 //}
                 if (await _dbProduct.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Product already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Product already Exists!");
                     return BadRequest(ModelState);
                 }
+                if (await _dbProduct.GetAsync(u => u.CategoryId == createDto.CategoryId) == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "CategoryId  is Invalid!");
+                    return BadRequest(ModelState);
+                }
+
 
                 if (createDto == null)
                 {
@@ -174,6 +180,16 @@ namespace OnlineShopping.Controllers
         {
             try
             {
+                if (await _dbProduct.GetAsync(u => u.Name.ToLower() == updateDto.Name.ToLower()) != null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "Product already Exists!");
+                    return BadRequest(ModelState);
+                }
+                if (await _dbProduct.GetAsync(u => u.CategoryId == updateDto.CategoryId) == null)
+                {
+                    ModelState.AddModelError("ErrorMessages", "CategoryId  is Invalid!");
+                    return BadRequest(ModelState);
+                }
                 if (updateDto == null || id != updateDto.Id)
                 {
                     return BadRequest();

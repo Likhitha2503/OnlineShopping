@@ -97,7 +97,7 @@ namespace OnlineShopping.Controllers
                 //}
                 if (await _dbCategory.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
                 {
-                    ModelState.AddModelError("CustomError", "Category already Exists!");
+                    ModelState.AddModelError("ErrorMessages", "Category already Exists!");
                     return BadRequest(ModelState);
                 }
 

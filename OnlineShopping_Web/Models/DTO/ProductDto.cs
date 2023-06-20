@@ -19,7 +19,7 @@ namespace OnlineShopping_Web.Models.DTO
         [Required]
         public int AvailableQuantity { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public CategoryDto Category { get; set; }
     }
