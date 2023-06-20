@@ -44,8 +44,8 @@
 					@*<td>@item.Description</td>*@
 
 					<td>
-						<a asp-controller="Category" asp-action="Updateproduct" asp-route-villaNo="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-						<a asp-controller="Category" asp-action="DeleteProduct" asp-route-villaNo="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+						<a asp-controller="Product" asp-action="Updateproduct" asp-route-Id="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+						<a asp-controller="Product" asp-action="DeleteProduct" asp-route-Id="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
 					</td>
 				</tr>
 			}
