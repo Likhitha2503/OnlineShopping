@@ -56,10 +56,12 @@ namespace OnlineShopping_Web.Controllers
 			if (ModelState.IsValid)
 			{
 
-				var response = await _productService.CreateAsync<APIResponse>(model.Product);
+                var response = await _productService.CreateAsync<APIResponse>(model.Product);
 				if (response != null && response.IsSuccess)
 				{
-					return RedirectToAction(nameof(IndexProduct));
+                    TempData["success"] = "Product created successfully";
+
+                    return RedirectToAction(nameof(IndexProduct));
 				}
                 else
                 {
@@ -79,7 +81,7 @@ namespace OnlineShopping_Web.Controllers
                         }); ;
                 }
             }
-			return View(model);
+            return View(model);
 		}
 
         public async Task<IActionResult> UpdateProduct(int Id)
@@ -114,6 +116,7 @@ namespace OnlineShopping_Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                TempData["success"] = "Product updated successfully";
 
                 var response = await _productService.UpdateAsync<APIResponse>(model.Product);
                 if (response != null && response.IsSuccess)
@@ -176,6 +179,8 @@ namespace OnlineShopping_Web.Controllers
             var response = await _productService.DeleteAsync<APIResponse>(model.Product.Id);
             if (response != null && response.IsSuccess)
             {
+                TempData["success"] = "Product deleted successfully";
+
                 return RedirectToAction(nameof(IndexProduct));
             }
 

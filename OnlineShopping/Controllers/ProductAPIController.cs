@@ -180,11 +180,11 @@ namespace OnlineShopping.Controllers
         {
             try
             {
-                if (await _dbProduct.GetAsync(u => u.Name.ToLower() == updateDto.Name.ToLower()) != null)
-                {
-                    ModelState.AddModelError("ErrorMessages", "Product already Exists!");
-                    return BadRequest(ModelState);
-                }
+                //if (await _dbProduct.GetAsync(u => u.Name.ToLower() == updateDto.Name.ToLower()) != null)
+                //{
+                //    ModelState.AddModelError("ErrorMessages", "Product already Exists!");
+                //    return BadRequest(ModelState);
+                //}
                 if (await _dbProduct.GetAsync(u => u.CategoryId == updateDto.CategoryId) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "CategoryId  is Invalid!");
