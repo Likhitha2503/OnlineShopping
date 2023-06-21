@@ -20,9 +20,9 @@ namespace OnlineShopping_API.Repository
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
         }
 
-        public bool IsUniqueUser(string username)
+        public bool IsUniqueUser(string Email)
         {
-            var user = _db.LocalUsers.FirstOrDefault(x => x.UserName == username);
+            var user = _db.LocalUsers.FirstOrDefault(x => x.Email == Email);
             if (user == null)
             {
                 return true;
@@ -33,7 +33,7 @@ namespace OnlineShopping_API.Repository
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            var user = _db.LocalUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower() && u.Password == loginRequestDto.Password);
+            var user = _db.LocalUsers.FirstOrDefault(u => u.Email.ToLower() == loginRequestDto.Email.ToLower() && u.Password == loginRequestDto.Password);
 
             if (user == null)
             {
@@ -72,10 +72,11 @@ namespace OnlineShopping_API.Repository
         {
             LocalUser user = new()
             {
-                UserName = registrationRequestDto.UserName,
+                Email = registrationRequestDto.Email,
                 Password = registrationRequestDto.Password,
                 Name = registrationRequestDto.Name,
-                Role = registrationRequestDto.Role
+                Role = registrationRequestDto.Role,
+                PhoneNumber = registrationRequestDto.PhoneNumber
             };
 
             _db.LocalUsers.Add(user);
