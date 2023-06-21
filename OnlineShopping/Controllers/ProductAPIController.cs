@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,10 @@ namespace OnlineShopping.Controllers
 
         }
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public  async Task<ActionResult<APIResponse>> GetProducts()
         {
             try
@@ -51,9 +55,12 @@ namespace OnlineShopping.Controllers
 
 
         [HttpGet("{id:int}",Name = "GetProduct")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
         public async Task<ActionResult<APIResponse>> GetProducts(int id)
         {
@@ -84,17 +91,17 @@ namespace OnlineShopping.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<APIResponse>> CreateProduct([FromBody] ProductDto createDto)
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    return BadRequest(ModelState);
-                //}
+                
                 if (await _dbProduct.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
                 {
                     ModelState.AddModelError("ErrorMessages", "Product already Exists!");
@@ -111,22 +118,10 @@ namespace OnlineShopping.Controllers
                 {
                     return BadRequest(createDto);
                 }
-                //if (villaDTO.Id > 0)
-                //{
-                //    return StatusCode(StatusCodes.Status500InternalServerError);
-                //}
+                
                 Product product = _mapper.Map<Product>(createDto);
 
-                //Villa model = new()
-                //{
-                //    Amenity = createDTO.Amenity,
-                //    Details = createDTO.Details,
-                //    ImageUrl = createDTO.ImageUrl,
-                //    Name = createDTO.Name,
-                //    Occupancy = createDTO.Occupancy,
-                //    Rate = createDTO.Rate,
-                //    Sqft = createDTO.Sqft
-                //};
+               
                 await _dbProduct.CreateAsync(product);
                 _response.Result = _mapper.Map<ProductDto>(product);
                 _response.StatusCode = HttpStatusCode.Created;
@@ -145,7 +140,10 @@ namespace OnlineShopping.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("{id:int}", Name = "DeleteProduct")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<APIResponse>> DeleteProduct(int id)
         {
             try
@@ -176,15 +174,15 @@ namespace OnlineShopping.Controllers
         [HttpPut("{id:int}", Name = "UpdateProduct")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult<APIResponse>> UpdateProduct(int id, [FromBody] ProductDto updateDto)
         {
             try
             {
-                //if (await _dbProduct.GetAsync(u => u.Name.ToLower() == updateDto.Name.ToLower()) != null)
-                //{
-                //    ModelState.AddModelError("ErrorMessages", "Product already Exists!");
-                //    return BadRequest(ModelState);
-                //}
+               
                 if (await _dbProduct.GetAsync(u => u.CategoryId == updateDto.CategoryId) == null)
                 {
                     ModelState.AddModelError("ErrorMessages", "CategoryId  is Invalid!");
