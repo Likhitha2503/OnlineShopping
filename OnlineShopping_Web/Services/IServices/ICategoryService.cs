@@ -4,10 +4,10 @@ namespace OnlineShopping_Web.Services.IServices
 {
     public interface ICategoryService
     {
-        Task<T> GetAllAsync<T>();
-        Task<T> GetAsync<T>(int id);
-        Task<T> CreateAsync<T>(CategoryDto dto);
-        Task<T> UpdateAsync<T>(CategoryDto dto);
-        Task<T> DeleteAsync<T>(int id);
+        Task<T> GetAllAsync<T>(string token);
+        Task<T> GetAsync<T>(int id, string token);
+        Task<T> CreateAsync<T>(CategoryDto dto, string token);
+        Task<T> UpdateAsync<T>(CategoryDto dto, string token);
+        Task<T> DeleteAsync<T>(int id, string token);
     }
 }

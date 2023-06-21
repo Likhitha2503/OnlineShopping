@@ -30,7 +30,6 @@ namespace OnlineShopping.Controllers
 
         }
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -56,7 +55,7 @@ namespace OnlineShopping.Controllers
 
 
         [HttpGet("{id:int}",Name = "GetCategory")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

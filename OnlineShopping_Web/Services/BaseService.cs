@@ -2,6 +2,7 @@
 using OnlineShopping_Utility;
 using OnlineShopping_Web.Models;
 using OnlineShopping_Web.Services.IServices;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace OnlineShopping_Web.Services
@@ -46,6 +47,11 @@ namespace OnlineShopping_Web.Services
                 }
 
                 HttpResponseMessage apiResponse = null;
+
+                if (!string.IsNullOrEmpty(apiRequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
 
                 apiResponse = await client.SendAsync(message);
 

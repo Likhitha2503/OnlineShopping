@@ -17,51 +17,51 @@ namespace OnlineShopping_Web.Services
 
         }
 
-        public Task<T> CreateAsync<T>(CategoryDto dto)
+        public Task<T> CreateAsync<T>(CategoryDto dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = categoryUrl + "/api/CategoryAPI"
+                Url = categoryUrl + "/api/CategoryAPI", Token = token
             });
         }
 
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = categoryUrl + "/api/CategoryAPI/" + id
+                Url = categoryUrl + "/api/CategoryAPI/" + id, Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = categoryUrl + "/api/CategoryAPI"
+                Url = categoryUrl + "/api/CategoryAPI", Token=token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id,string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = categoryUrl + "/api/CategoryAPI/" + id
+                Url = categoryUrl + "/api/CategoryAPI/" + id, Token=token
             });
         }
 
-        public Task<T> UpdateAsync<T>(CategoryDto dto)
+        public Task<T> UpdateAsync<T>(CategoryDto dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = categoryUrl + "/api/CategoryAPI/" + dto.Id
+                Url = categoryUrl + "/api/CategoryAPI/" + dto.Id, Token = token
             });
         }
 

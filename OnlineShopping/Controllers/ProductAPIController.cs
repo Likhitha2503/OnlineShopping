@@ -29,7 +29,6 @@ namespace OnlineShopping.Controllers
 
         }
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -55,7 +54,6 @@ namespace OnlineShopping.Controllers
 
 
         [HttpGet("{id:int}",Name = "GetProduct")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
